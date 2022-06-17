@@ -1,6 +1,6 @@
 import express from 'express'
 import mysql from 'mysql'
-import bcrypt, { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 import session from 'express-session'
 import multer from 'multer'
 
@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'evs_db'
+    database: 'evs'
 })
 
 //set type of templating engine used - embedded javascript(ejs)
