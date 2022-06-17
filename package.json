@@ -1,0 +1,29 @@
+{
+  "name": "evs",
+  "version": "1.0.0",
+  "description": "Simple Electronic Voting System",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "vote",
+    "voting system",
+    "elections"
+  ],
+  "author": "Evans Kibet",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "ejs": "^3.1.7",
+    "express": "^4.18.0",
+    "express-session": "^1.17.2",
+    "multer": "^1.4.4",
+    "mysql": "^2.18.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

@@ -1,0 +1,78 @@
+<%- include('partials/header')%>
+    
+<script src="/js/select-location.js" type="module"></script>
+
+<main class="container">
+
+    <p id="welcome"><%=`Welcome ${locals.username}`%>,</p>
+
+    <div id="profile_form"> 
+        <h1>Edit Profile</h1>
+        <form action="/edit-profile/<%= profile.v_id %>" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="">Full Name</label>
+                <input type="text" name = "fullname" id="" value="<%=profile.fullname %>" required>
+            </div>
+
+            <div>
+                <label for="">Email</label>
+                <input type="email" name = "email" id="" value="<%=profile.email %>" required>
+            </div>
+
+            <div>
+                <label for="">National ID</label>
+                <input type="text" name = "national_id" id="" value="<%=profile.national_id %>" required>
+            </div>
+
+            <div>
+                <label for="">County</label>
+                <select name="county" id="select-county" required>
+                    <option value="<%= profile.county %>" selected><%= profile.county %></option>
+                    <option value="">Select County</option>
+                    
+                </select>
+               
+            </div>
+
+            <div>
+                <label for="">Constituency</label>
+                <select name="constituency" id="select-constituency" required>
+                    <option class="option-constituency" value="<%= profile.constituency %>" selected><%= profile.constituency %></option>
+                    <!-- <option value="">Select Constituency</option> -->
+                    
+                </select>
+          
+            </div>
+            
+            <div>
+                <label for="">Assembly Ward</label>
+                <select name="assembly_ward" id="select-ward" required>
+                    <option class="option-ward" value="<%= profile.assembly_ward %>" selected><%= profile.assembly_ward %></option>
+                    <!-- <option value="">Select Ward</option> -->
+                    
+                </select>
+               
+            </div>
+            
+            <div>
+                <label for="">Polling Station</label>
+                <input type="text" name="polling_station" id="" value="<%=profile.polling_station %>" required>
+            </div>
+            
+            <div>
+                <label for=""> Change Profile Picture?</label>
+                <input type="file" name="photo_url" id="" >
+            </div>
+            
+            <div id="btns">
+                <a href="/dashboard">Cancel</a>
+                <input type="submit" value="Save">
+            </div>
+
+        </form>
+    </div>
+
+</main>
+
+   
+<%- include('partials/footer')%>

@@ -1,0 +1,262 @@
+@font-face {
+    font-family: Nanum;
+    src: url('NanumGothic-Regular.ttf');
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Nanum;
+}
+
+.container {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.error {
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #ff0000;
+}
+
+header{
+    height: 60px;
+    background-color: #edeafc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header a {
+    text-decoration: none;
+    color: #2e5266;
+    font-weight: bold;
+}
+
+header h1 {
+    font-size: 45px;
+}
+
+nav li {
+    display: inline;
+    margin-left: 5px;
+}
+
+nav .nav-link:hover {
+    text-decoration: underline #2e5266;
+    text-decoration-thickness: 2px;
+
+}
+
+nav #login {
+    border: 1px solid #2e5266;
+    padding: 10px 15px;
+}
+
+nav #signup {
+    padding: 10px 15px;
+    background-color: #2e5266;
+    border: 1px solid #2e5266;
+    color: #fff;
+}
+
+.access-point {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.access-point form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #cdc7e9;
+    border-radius: 5px;
+    padding: 13px;
+    width: 30%;
+}
+
+.access-point h2 {
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 8px ;
+    color: #2e5266;
+}
+
+.access-point form label {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.access-point form input {
+    font-size: 22px;
+    padding: 4px;
+    margin-bottom: 5px;
+}
+
+.access-point form input[type= 'submit']{
+    background-color: #2e5266;
+    color: #fff;
+    border: 1px solid #2e5266;
+}
+
+.access-point form p {
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+#welcome {
+    margin: 5px 0;
+    font-size: 23px;
+}
+
+#profile_form {
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid #edeafc;
+    border-radius: 5px;
+}
+
+#profile_form h1 {
+    background-color: #2e5266;
+    color: #fff;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#profile_form form {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#profile_form form div {
+    margin-bottom: 8px;
+}
+
+
+#profile_form form div *{
+    font-size: 17px;
+}
+
+#profile_form form div input, #profile_form form div select {
+    width: 65%;
+    float: right;
+}
+
+#profile_form form #btns {
+    display: flex;
+}
+
+#profile_form form a {
+    margin-left: auto;
+    text-decoration: none;
+    padding: 4px 9px;
+    width: 90px;
+    background-color: #ff0000;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    color: #fff;
+    margin-right: 8px;
+    text-align: center;
+}
+
+#profile_form form input[type='submit'] {
+    padding: 4px 9px;
+    width: 90px;
+    background-color: #2e5266;
+    border: 1px solid #2e5266;
+    border-radius: 5px;
+    color: #fff;
+}
+
+/*dashboard*/
+#dashboard-profile {
+    display: flex;
+}
+
+#dashboard-profile #picture {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboard-profile #picture div{
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+#dashboard-profile #picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 15px;
+}
+
+#dashboard-profile #picture h1 {
+    font-size: 24px;
+    color: #2c2b2b;
+    text-align: center;
+    margin-top: 5px;
+}
+ 
+#dashboard-profile #picture p{
+    font-size: 16px;
+    color: #7f7d7d;
+    font-style: italic;
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+#dashboard-profile #picture a{
+    text-decoration: none;
+    padding: 4px 9px;
+    border-radius: 5px;
+    background-color: #2e5266;
+    border: 1px solid #2e5266;
+    color: #fff;
+    width: max-content;
+    margin: 0 auto;
+}
+
+#dashboard-profile #details {
+    padding: 15px;
+    background-color: #edeafc;
+    border-radius: 15px;
+    width: 60%;
+}
+
+#dashboard-profile #details .title{
+    font-size: 17px;
+    color: #2e5266;
+    border-bottom: 1px solid;
+    padding-bottom: 3px;
+    margin-bottom: 6px;
+}
+
+#dashboard-profile #details table .area{
+
+    padding-bottom: 5px;
+    font-weight: bold;
+
+
+    
+
+}
+
+#dashboard-profile #details table .data{
+    color: #7f7d7d;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+/*dashboard*/

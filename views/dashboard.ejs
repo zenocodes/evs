@@ -1,0 +1,40 @@
+<%- include ('partials/header') %>
+    <br>
+    <div id="dashboard-profile" class="container">
+        <div id="picture">
+            <div><img src="/uploads/<%= profile.photo_url %>" alt=""></div>
+            <h1><%=profile.fullname%></h1>
+            <p>ID <%= profile.national_id%></p>
+            <a href="/edit-profile/<%= profile.v_id%>">Edit Profile</a>
+        </div>
+        <div id="details">
+            <p class="title" >Details</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="area">County</td>
+                        <td class="data"><%= profile.county %></td>
+                    </tr>
+                    <tr>
+                        <td class="area">Constituency</td>
+                        <td class="data"> <%= profile.constituency %></td>
+                    </tr>
+                    <tr>
+                        <td class="area">Ward</td>
+                        <td class="data"> <%= profile.assembly_ward%></td>
+                    </tr>
+                    <tr>
+                        <td class="area">Polling Station</td>
+                        <td class="data"><%= profile.polling_station %></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <br>
+            <p class="title"> Snapshots</p>
+        </div>
+        
+       
+    </div>
+
+<%- include ('partials/footer') %>
