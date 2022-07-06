@@ -1,6 +1,8 @@
 <%- include('partials/header')%>
     
 <script src="/js/select-location.js" type="module"></script>
+<script src="/js/select-parties.js" type="module"></script>
+
 
 <main class="container">
 
@@ -25,7 +27,7 @@
             <div>
                 <label for="">Constituency</label>
                 <select name="constituency" id="select-constituency" required>
-                    <option value="">Select Constituency</option>
+                    <option class="option-constituency" value="">Select Constituency</option>
                 </select>
                 
             </div>
@@ -33,7 +35,7 @@
             <div>
                 <label for="">Assembly Ward</label>
                 <select name="assembly_ward" id="select-ward" required>
-                    <option value="">Select Ward</option>
+                    <option class="option-ward" value="">Select Ward</option>
                 </select>
                
             </div>
@@ -47,6 +49,34 @@
                 <label for="">Profile Picture</label>
                 <input type="file" name="photo_url" id="" required>
             </div>
+
+            <div id="radio-btns">
+                <label for="">Are you vying any position?</label>
+                <div>
+                    <input class="radio-btn" type="radio" name="vying" id="" value="false" checked> <label for="">No</label>
+                    <input class="radio-btn" type="radio" name="vying" id="" value="true"> <label for="">Yes</label>
+                </div>
+            </div>
+
+            <div class="contestant-input">
+                <label for="">Political Post</label>
+                <select name="post" id="">
+                    <option value="">Select position</option>
+                    <option value="President" class="post">President</option>
+                    <option value="Governor" class="post">Governor</option>
+                    <option value="Senator" class="post">Senator</option>
+                    <option value="Member of Parliament" class="post">Member of Parliament</option>
+                    <option value="Women Representative" class="post">Women Representative</option>
+                    <option value="Member of County Assembly" class="post">Member of County Assembly</option>
+                </select>
+            </div>
+
+            <div class="contestant-input">
+                <label for="">Political Party</label>
+                <select name="party" id="select-party">
+                    <option value="">Select party</option>                    
+                </select>
+            </div>
             
             <input type="submit" value="Save"> 
         </form>
@@ -54,5 +84,20 @@
 
 </main>
 
+<script>
+
+    let radioBtns = document.querySelectorAll("input[type='radio']")
+    radioBtns.forEach(radioBtn => {
+        radioBtn.addEventListener('change', (e) => {
+            let contestantInputFields = document.querySelectorAll('.contestant-input')
+            if(radioBtn.value === 'true') {
+                contestantInputFields.forEach(field => field.style.display = 'block')
+            } else {
+                contestantInputFields.forEach(field => field.style.display = 'none')
+            }
+        })
+    })
+
+</script>
    
 <%- include('partials/footer')%>
