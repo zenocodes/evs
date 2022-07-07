@@ -7,7 +7,7 @@ import multer from 'multer'
 const app = express()
 
 //set diskstorage for files
-const upload = multer({ dest: 'public/uploads/'})
+const upload = multer({ dest: 'public/uploads/' })
 
 
 //establish connection with database
@@ -24,18 +24,18 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 //configuration to retrieve form data
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({ extended: false }))
 
 //prepare to use session
 app.use(session({
-    secret:'screen',
+    secret: 'screen',
     resave: false,
     saveUninitialized: false
 }))
 
 //check for login each time
-app.use((req,res,next) => {
-    if(req.session.userID === undefined) {
+app.use((req, res, next) => {
+    if (req.session.userID === undefined) {
         res.locals.isLoggedIn = false //if the session of the userID is undefined, the user is not logged in
     } else {
         res.locals.isLoggedIn = true // otherwise this person is logged in
@@ -46,86 +46,121 @@ app.use((req,res,next) => {
 
 // ROUTES
 // homepage
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
     res.render('index')
 })
 
 
 // dashboard
-app.get('/dashboard', (req,res) => {
+app.get('/dashboard', (req, res) => {
     if (res.locals.isLoggedIn) {
 
-    let sql = `SELECT * FROM voters JOIN profile ON v_id = v_id_fk WHERE profile_status = 'COMPLETE' AND v_id = ${req.session.userID}`
+        let sql = `SELECT * FROM voters JOIN profile ON v_id = v_id_fk WHERE profile_status = 'COMPLETE' AND v_id = ${req.session.userID}`
 
-    connection.query(
-        sql, 
-        (error, results) => {
-            res.render('dashboard', {profile: results[0]})
-        }
-    )
+        connection.query(
+            sql,
+            (error, results) => {
+                res.render('dashboard', { profile: results[0] })
+            }
+        )
 
     } else {
-         res.redirect('/login')
-        }   
+        res.redirect('/login')
+    }
 })
 
 //profile
-app.get('/profile', (req,res) => {
-   if (res.locals.isLoggedIn) {
-    res.render('profile', {userID : req.session.userID})
-   } else {
-       res.redirect('/login')
-   }
-}) 
+app.get('/profile', (req, res) => {
+    if (res.locals.isLoggedIn) {
+        res.render('profile', { userID: req.session.userID })
+    } else {
+        res.redirect('/login')
+    }
+})
 
 const profiles = []
 
 //complete profile
 app.post('/complete-profile', upload.single('photo_url'), (req, res) => {
-    
-let sql = 'INSERT INTO profile (v_id_fk, national_id, photo_url, polling_station, county, constituency, assembly_ward) VALUES (?,?,?,?,?,?,?)'
 
-connection.query(
-    /*sql statement*/
-    sql, 
-    [   
-        req.session.userID, 
-        req.body.national_id,
-        req.file.filename,
-        req.body.polling_station, 
-        req.body.county,
-        req.body.constituency,
-        req.body.assembly_ward
-    ],
-   /*callback function*/
-    (error, results) => {
-
-        let sql = 'UPDATE voters SET profile_status = ? WHERE v_id =?'
+    if(req.body.vying === 'false') {
+        let sql = 'INSERT INTO profile (v_id_fk, national_id, photo_url, polling_station, county, constituency, assembly_ward) VALUES (?,?,?,?,?,?,?)'
 
         connection.query(
-            sql, ['COMPLETE', req.session.userID], (error, results) => {
-                res.redirect('/dashboard')
+            /*sql statement*/
+            sql,
+            [
+                req.session.userID,
+                req.body.national_id,
+                req.file.filename,
+                req.body.polling_station,
+                req.body.county,
+                req.body.constituency,
+                req.body.assembly_ward
+            ],
+            /*callback function*/
+            (error, results) => {
+
+                let sql = 'UPDATE voters SET profile_status = ? WHERE v_id =?'
+
+                connection.query(
+                    sql, ['COMPLETE', req.session.userID], (error, results) => {
+                        res.redirect('/dashboard')
+                    }
+                )
             }
         )
+    } else {
+        let sql = 'INSERT INTO profile (v_id_fk, national_id, photo_url, polling_station, county, constituency, assembly_ward, vying, post, party) VALUES (?,?,?,?,?,?,?,?,?,?)'
+
+        connection.query(
+            /*sql statement*/
+            sql,
+            [
+                req.session.userID,
+                req.body.national_id,
+                req.file.filename,
+                req.body.polling_station,
+                req.body.county,
+                req.body.constituency,
+                req.body.assembly_ward,
+                'true',
+                req.body.post,
+                req.body.party
+            ],
+            /*callback function*/
+            (error, results) => {
+
+                let sql = 'UPDATE voters SET profile_status = ? WHERE v_id =?'
+
+                connection.query(
+                    sql, ['COMPLETE', req.session.userID], (error, results) => {
+                        res.redirect('/dashboard')
+                    }
+                )
+            }
+        )
+
     }
-)
 
     
+
+
 })
 
 //edit profile
-app.get('/edit-profile/:id', (req,res) => {
+app.get('/edit-profile/:id', (req, res) => {
     if (res.locals.isLoggedIn) {
-        let sql = `SELECT *FROM voters JOIN profile ON v_id = v_id_fk WHERE V_id_fk = ${req.params.id}` 
+        let sql = `SELECT *FROM voters JOIN profile ON v_id = v_id_fk WHERE V_id_fk = ${req.params.id}`
         connection.query(
             sql, (error, results) => {
-                res.render('edit-profile', {profile: results[0]})
+                res.render('edit-profile', { profile: results[0] })
             }
         )
-       
-       } else {
-           res.redirect('/login')
-       }
+
+    } else {
+        res.redirect('/login')
+    }
 })
 
 //submit edit profile form
@@ -138,33 +173,33 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
         constituency: req.body.constituency,
         assemblyWard: req.body.assembly_ward,
         pollingStation: req.body.polling_station,
-        picture:  req.file
+        picture: req.file
     }
 
-  
 
-    let sql = 'UPDATE voters SET fullname = ?, email = ? WHERE v_id = ?' 
+
+    let sql = 'UPDATE voters SET fullname = ?, email = ? WHERE v_id = ?'
 
     connection.query(
         sql,
-         [profile.name, profile.email, parseInt(req.params.id)],
-         (error, results) => {
+        [profile.name, profile.email, parseInt(req.params.id)],
+        (error, results) => {
 
             let sql
-            if(profile.picture === undefined){
+            if (profile.picture === undefined) {
                 sql = 'UPDATE profile SET national_id = ?, polling_station = ?, county = ?, constituency = ?, assembly_ward = ? WHERE v_id_fk = ?'
                 connection.query(
                     sql,
-                     [
-                         profile.nationalID,
-                         profile.pollingStation,
-                         profile.county,
-                         profile.constituency,
-                         profile.assemblyWard,
-                         parseInt(req.params.id)
+                    [
+                        profile.nationalID,
+                        profile.pollingStation,
+                        profile.county,
+                        profile.constituency,
+                        profile.assemblyWard,
+                        parseInt(req.params.id)
 
                     ],
-                     (error, results) => {
+                    (error, results) => {
                         res.redirect('/dashboard')
                     }
                 )
@@ -181,7 +216,7 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
                         profile.assemblyWard,
                         parseInt(req.params.id)
 
-                   ],
+                    ],
                     (error, results) => {
                         res.redirect('/dashboard')
                     }
@@ -194,57 +229,57 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
 
 //display login form
 //we are requesting something
-app.get('/login', (req,res) =>{
-   const user = {
-       email: '',
-       password: ''
-   }
-    res.render('login', {error:false, user: user})
+app.get('/login', (req, res) => {
+    const user = {
+        email: '',
+        password: ''
+    }
+    res.render('login', { error: false, user: user })
 })
 
 //submit login form
 //we expect a change in the database==we are sending something
-app.post('/login', (req,res) => {
-   
+app.post('/login', (req, res) => {
+
     const user = {
         email: req.body.email,
         password: req.body.password
     }
-    
-let sql = 'SELECT * FROM voters WHERE email =?'
+
+    let sql = 'SELECT * FROM voters WHERE email =?'
 
     connection.query(
         sql,
         [user.email],
         (error, results) => {
-            if(results.length > 0) {
-                bcrypt.compare(user.password, results[0].password,(error, matches) => {
-                    if(matches) {
+            if (results.length > 0) {
+                bcrypt.compare(user.password, results[0].password, (error, matches) => {
+                    if (matches) {
                         req.session.userID = results[0].v_id
                         req.session.username = results[0].fullname.split(' ')[0]
-                        if(results[0].profile_status === 'INCOMPLETE') {   
+                        if (results[0].profile_status === 'INCOMPLETE') {
                             res.redirect('/profile')
                             console.log(req.sessionID.userID)
                         } else {
                             res.redirect('/dashboard')
                         }
-                    }else {
+                    } else {
                         let message = 'Email/Password mismatch.'
-                    
-                        res.render('login',{
+
+                        res.render('login', {
                             error: true,
                             message: message,
                             user: user
                         })
                     }
-                })    
+                })
             } else {
                 let message = 'Account does not exist. Please create one to log in'
                 res.render('login', {
-                error: true, 
-                message: message,
-                user: user,
-        })
+                    error: true,
+                    message: message,
+                    user: user,
+                })
             }
         }
     )
@@ -253,12 +288,12 @@ let sql = 'SELECT * FROM voters WHERE email =?'
 //display signup
 app.get('/signup', (req, res) => {
     const user = {
-        fullname:'',
-        email:'',
-        password:'',
+        fullname: '',
+        email: '',
+        password: '',
         confirmPassword: ''
     }
-    res.render('signup', {error: false, user: user})
+    res.render('signup', { error: false, user: user })
 })
 
 
@@ -266,13 +301,13 @@ app.get('/signup', (req, res) => {
 //submit signup form
 app.post('/signup', (req, res) => {
 
-    
-//validation for backend
-    if(req.body.password === req.body.confirmPassword) {
+
+    //validation for backend
+    if (req.body.password === req.body.confirmPassword) {
 
         let sql = 'SELECT email FROM voters WHERE email = ?'
-        connection.query(sql, [req.body.email], (error,results) => {
-            if(results.length > 0){
+        connection.query(sql, [req.body.email], (error, results) => {
+            if (results.length > 0) {
                 const user = {
                     fullname: req.body.fullname,
                     email: req.body.email,
@@ -281,9 +316,9 @@ app.post('/signup', (req, res) => {
                 }
                 let message = 'Account with email provided already exists.'
                 res.render('signup', {
-                    error:true,
+                    error: true,
                     message: message,
-                    user:user
+                    user: user
                 })
             } else {
                 bcrypt.hash(req.body.password, 10, (error, hash) => {
@@ -291,20 +326,20 @@ app.post('/signup', (req, res) => {
                         fullname: req.body.fullname,
                         email: req.body.email,
                         password: hash
-            
+
                     }
 
-                        let sql = 'INSERT INTO voters (fullname, email, password) VALUES(?,?,?)'
+                    let sql = 'INSERT INTO voters (fullname, email, password) VALUES(?,?,?)'
 
-                        connection.query(
-                            sql, [user.fullname,user.email, user.password],
-                            (eror, results) => {
-                                res.redirect('/login')
-                            }
-                        )
-                    })
-                }
+                    connection.query(
+                        sql, [user.fullname, user.email, user.password],
+                        (eror, results) => {
+                            res.redirect('/login')
+                        }
+                    )
+                })
             }
+        }
         )
 
     } else {
@@ -316,16 +351,16 @@ app.post('/signup', (req, res) => {
         }
         let message = 'Password/Confirm password mismatch!'
         res.render('signup', {
-            error:true,
+            error: true,
             message: message,
-            user:user
+            user: user
         })
     }
 })
-  
+
 // logout functionality
 app.get('/logout', (req, res) => { //when logging out we are destroying the session
-    req.session.destroy((error )/*in the event it fails to destroy we shll display the error*/ => {
+    req.session.destroy((error)/*in the event it fails to destroy we shll display the error*/ => {
         res.redirect('/')
     })
 })
@@ -337,7 +372,7 @@ app.get('*', (req, res) => {
 
 
 
-const PORT = process.env.PORT || 3000 
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
     console.log('Server Up: Application running...')
