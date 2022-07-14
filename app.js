@@ -151,7 +151,7 @@ app.post('/complete-profile', upload.single('photo_url'), (req, res) => {
 //edit profile
 app.get('/edit-profile/:id', (req, res) => {
     if (res.locals.isLoggedIn) {
-        let sql = `SELECT *FROM voters JOIN profile ON v_id = v_id_fk WHERE V_id_fk = ${req.params.id}`
+        let sql = `SELECT * FROM voters JOIN profile ON v_id = v_id_fk WHERE V_id_fk = ${req.params.id}`
         connection.query(
             sql, (error, results) => {
                 res.render('edit-profile', { profile: results[0] })
@@ -173,7 +173,9 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
         constituency: req.body.constituency,
         assemblyWard: req.body.assembly_ward,
         pollingStation: req.body.polling_station,
-        picture: req.file
+        picture: req.file,
+        post: req.body.post,
+        party: req.body.party
     }
 
 
@@ -187,7 +189,7 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
 
             let sql
             if (profile.picture === undefined) {
-                sql = 'UPDATE profile SET national_id = ?, polling_station = ?, county = ?, constituency = ?, assembly_ward = ? WHERE v_id_fk = ?'
+                sql = 'UPDATE profile SET national_id = ?, polling_station = ?, county = ?, constituency = ?, assembly_ward = ?, post = ?, party = ? WHERE v_id_fk = ?'
                 connection.query(
                     sql,
                     [
@@ -196,6 +198,8 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
                         profile.county,
                         profile.constituency,
                         profile.assemblyWard,
+                        profile.post,
+                        profile.party,
                         parseInt(req.params.id)
 
                     ],
@@ -204,7 +208,7 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
                     }
                 )
             } else {
-                sql = 'UPDATE profile SET national_id = ?, photo_url = ?,  polling_station = ?, county = ?, constituency = ?, assembly_ward = ?  WHERE v_id_fk = ?'
+                sql = 'UPDATE profile SET national_id = ?, photo_url = ?,  polling_station = ?, county = ?, constituency = ?, assembly_ward = ?, post = ?, party = ?  WHERE v_id_fk = ?'
                 connection.query(
                     sql,
                     [
@@ -214,8 +218,9 @@ app.post('/edit-profile/:id', upload.single('photo_url'), (req, res) => {
                         profile.county,
                         profile.constituency,
                         profile.assemblyWard,
+                        profile.post,
+                        profile.party,
                         parseInt(req.params.id)
-
                     ],
                     (error, results) => {
                         res.redirect('/dashboard')
